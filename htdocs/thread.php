@@ -47,6 +47,26 @@ $pdo = null;
 		    </div>
 		<?php endforeach; ?>
 	    </div>
+	    <hr>
+	    <div>
+		<h2>書き込む</h2>
+		<form method="post" action="/f/new-post.php">
+		    <input type="hidden" name="thread_id" value="<?=$current_thread_id?>">
+		    <div>
+			<label for="poster_nickname">名前</label>
+			<br>
+			<input type="text" id="poster_nickname" name="poster_nickname">
+		    </div>
+		    <div>
+			<label for="content">書き込み内容</label>
+			<br>
+			<textarea id="content" name="content"></textarea>
+		    </div>
+		    <div>
+			<input type="submit" name="submit" value="送信">
+		    </div>
+		</form>
+	    </div>
 	<?php endif; ?>
 	<?php include __DIR__.'/include/footer.php'; ?>
     </body>
