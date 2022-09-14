@@ -7,6 +7,8 @@ define('DB_USER', 'root');
 define('DB_PASSWORD', '');
 define('DB_NAME', 'my_keijiban');
 
+# 掲示板の名前
+define('BBS_NAME', 'マイ掲示板');
 # スレッドタイトルの最大長
 define('BBS_TITLE_LENGTH', 64);
 # 投稿者名の最大長
