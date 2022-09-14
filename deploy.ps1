@@ -1,4 +1,5 @@
 New-Variable -Name DocumentRoot -Value C:\xampp\htdocs -Option Constant
+Set-Alias -Name Execute-PHP -Value C:\xampp\php\php.exe -Option Constant
 
 if (!(Test-Path $DocumentRoot -PathType Container)) {
   Write-Host 'Something is wrong with the document root.'
@@ -13,3 +14,5 @@ foreach ($file in gci htdocs) {
   }
   cpi $file $target -Recurse
 }
+
+Execute-PHP -r "require_once '$(Join-Path $DocumentRoot include model init.php)'; initialize_main();"
