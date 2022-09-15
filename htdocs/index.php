@@ -18,6 +18,7 @@ if ($pdo) {
     </head>
     <body>
 	<?php include __DIR__.'/include/header.php'; ?>
+	<?php include __DIR__.'/include/status.php'; ?>
 	<div>
 	    <h2>スレッド一覧</h2>
 	    <?php if (is_null($threads)): ?>

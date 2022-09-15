@@ -33,6 +33,7 @@ $pdo = null;
     </head>
     <body>
 	<?php include __DIR__.'/include/header.php'; ?>
+	<?php include __DIR__.'/include/status.php'; ?>
 	<?php if ($is_error): ?>
 	    <p>エラーが発生しました。時間をおいて再度アクセスしてください。</p>
 	<?php else: ?>

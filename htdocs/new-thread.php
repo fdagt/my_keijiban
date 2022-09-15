@@ -9,6 +9,7 @@ $current_thread_id = null;
     </head>
     <body>
 	<?php include __DIR__.'/include/header.php'; ?>
+	<?php include __DIR__.'/include/status.php'; ?>
 	<div>
 	    <h2>新しいスレッド</h2>
 	    <form method="post" action="/f/new-thread.php">

@@ -18,6 +18,6 @@ $pdo = get_db_connection();
 $thread_id = make_new_thread($pdo, $title, $poster_nickname, new DateTime('now', new DateTimeZone(BBS_TIMEZONE)), $content);
 
 if (is_null($thread_id))
-    header('Location: /new-thread.php');
+    header('Location: /new-thread.php?s='.STATUS_CODE_NEW_THREAD_FAIL);
 else
-    header('Location: /thread.php?id=' . $thread_id);
+    header('Location: /thread.php?id='.$thread_id.'&s='.STATUS_CODE_NEW_THREAD_SUCCESS);
