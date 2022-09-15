@@ -41,14 +41,10 @@ $pdo = null;
 		<h2><?=htmlspecialchars($thread_info['title'])?></h2>
 		<?php
 		$count = 0;
-		foreach ($posts as $post):
-		++$count;
-		if ($post['is_hidden'] === IS_HIDDEN_FALSE):?>
-		    <div id="post-<?=$count?>">
-			<div><?=$count?>. <?=htmlspecialchars(nickname($post['poster_nickname']))?> <?=$post['created_at']?></div>
-			<pre><?=htmlspecialchars($post['content'])?></pre>
-		    </div>
-		<?php endif; endforeach; ?>
+		foreach ($posts as $post) {
+		    ++$count;
+		    include __DIR__.'/include/post.php';
+		} ?>
 	    </div>
 	    <hr>
 	    <div>

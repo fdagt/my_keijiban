@@ -26,15 +26,20 @@ if ($pdo) {
 	    <?php else: ?>
 		<?php
 		foreach ($threads as $thread):
-		if ($thread['is_hidden'] === IS_HIDDEN_FALSE):?>
+		if ($thread['is_hidden'] === IS_HIDDEN_FALSE): ?>
 		    <div>
-			<h3><a href="/thread.php?id=<?=$thread['id']?>"><?=htmlspecialchars($thread['title'])?></a></h3>
-			<div>
-			    <div>1. <?=htmlspecialchars($thread['poster_nickname'])?> <?=htmlspecialchars($thread['created_at'])?></div>
-			    <pre><?=htmlspecialchars($thread['content'])?></pre>
-			</div>
+			<h2><a href="/thread.php?id=<?=$thread['id']?>"><?=htmlspecialchars($thread['title'])?></a></h2>
+			<?php 
+			$count = 1;
+			$post = ['id' => $thread['first_post_id'],
+				 'thread_id' => $thread['id'],
+				 'poster_nickname' => $thread['poster_nickname'],
+				 'created_at' => $thread['created_at'],
+				 'is_hidden' => $thread['is_hidden'],
+				 'content' => $thread['content']];
+			include __DIR__.'/include/post.php'; ?>
 		    </div>
-		<?php endif; endforeach; ?>
+		<?php endif; endforeach;?>
 	    <?php endif; ?>
 	</div>
 	<?php include __DIR__.'/include/footer.php'; ?>
