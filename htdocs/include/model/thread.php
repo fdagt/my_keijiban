@@ -10,6 +10,16 @@ function get_thread_list(PDO $pdo) : ?array {
     }
 }
 
+function get_thread_and_first_post_list(PDO $pdo) : ?array {
+    try {
+        $stmt = $pdo->query('SELECT threads.id AS id, title, last_updated_at, first_post_id, poster_nickname, created_at, content FROM threads INNER JOIN posts ON threads.first_post_id = posts.id ORDER BY last_updated_at DESC');
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {
+        error_log($e->getMessage());
+        return null;
+    }
+}
+
 function get_thread_info(PDO $pdo, int $thread_id) : ?array {
     try {
         $stmt = $pdo->prepare('SELECT * FROM threads WHERE id = :thread_id');
@@ -37,6 +47,11 @@ function make_new_thread(PDO $pdo, string $title, string $poster_nickname, DateT
         $stmt->bindParam('poster_nickname', $poster_nickname);
         $stmt->bindParam('created_at', $formatted_created_at);
         $stmt->bindParam('content', $content);
+        $stmt->execute();
+        $post_id = $pdo->query('SELECT LAST_INSERT_ID()')->fetchColumn();
+        $stmt = $pdo->prepare('UPDATE threads SET first_post_id = :post_id WHERE id = :thread_id');
+        $stmt->bindParam('post_id', $post_id);
+        $stmt->bindParam('thread_id', $thread_id);
         $stmt->execute();
         $pdo->commit();
         return $thread_id;

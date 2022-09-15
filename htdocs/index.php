@@ -8,7 +8,7 @@ $current_thread_id = null;
 
 $pdo = get_db_connection();
 if ($pdo) {
-    $threads = get_thread_list($pdo);
+    $threads = get_thread_and_first_post_list($pdo);
 }
 
 ?><!DOCTYPE html>
@@ -24,11 +24,15 @@ if ($pdo) {
 	    <?php if (is_null($threads)): ?>
 		<p>スレッド一覧の取得に失敗しました。</p>
 	    <?php else: ?>
-		<ul>
 		    <?php foreach ($threads as $thread): ?>
-			<li><a href="/thread.php?id=<?=$thread['id']?>"><?=htmlspecialchars($thread['title'])?></a></li>
+			<div>
+			    <h3><a href="/thread.php?id=<?=$thread['id']?>"><?=htmlspecialchars($thread['title'])?></a></h3>
+			    <div>
+				<div>1. <?=htmlspecialchars($thread['poster_nickname'])?> <?=htmlspecialchars($thread['created_at'])?></div>
+				<pre><?=htmlspecialchars($thread['content'])?></pre>
+			    </div>
+			</div>
 		    <?php endforeach; ?>
-		</ul>
 	    <?php endif; ?>
 	</div>
 	<?php include __DIR__.'/include/footer.php'; ?>

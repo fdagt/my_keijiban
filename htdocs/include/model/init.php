@@ -9,10 +9,21 @@ function create_threads_table(PDO $pdo) : bool {
 id INT AUTO_INCREMENT,
 title VARCHAR(:title_length),
 last_updated_at DATETIME,
+first_post_id INT,
 PRIMARY KEY (id)
 )');
         $stmt->bindValue('title_length', BBS_TITLE_BYTE_LENGTH, PDO::PARAM_INT);
         $stmt->execute();
+        return true;
+    } catch (Exception $e) {
+        error_log($e->getMessage());
+        return false;
+    }
+}
+
+function alter_threads_table(PDO $pdo) : bool {
+    try {
+        $pdo->query('ALTER TABLE threads ADD FOREIGN KEY (first_post_id) REFERENCES posts(id)');
         return true;
     } catch (Exception $e) {
         error_log($e->getMessage());
@@ -43,7 +54,7 @@ FOREIGN KEY (thread_id) REFERENCES threads(id)
 
 function create_tables(PDO $pdo) : bool {
     $success = true;
-    $success = create_threads_table($pdo) && $success;
+    $success = create_threads_table($pdo) && alter_threads_table($pdo) && $success;
     $success = create_posts_table($pdo) && $success;
     return $success;
 }
