@@ -8,6 +8,7 @@ function create_threads_table(PDO $pdo) : bool {
         $stmt = $pdo->prepare('CREATE TABLE IF NOT EXISTS threads (
 id INT AUTO_INCREMENT,
 title VARCHAR(:title_length),
+last_updated_at DATETIME,
 PRIMARY KEY (id)
 )');
         $stmt->bindValue('title_length', BBS_TITLE_BYTE_LENGTH, PDO::PARAM_INT);

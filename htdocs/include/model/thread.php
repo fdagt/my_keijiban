@@ -2,7 +2,7 @@
 
 function get_thread_list(PDO $pdo) : ?array {
     try {
-        $stmt = $pdo->query('SELECT * FROM threads ORDER BY id DESC');
+        $stmt = $pdo->query('SELECT * FROM threads ORDER BY last_updated_at DESC');
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     } catch (Exception $e) {
         error_log($e->getMessage());
@@ -27,7 +27,8 @@ function make_new_thread(PDO $pdo, string $title, string $poster_nickname, DateT
     $formatted_created_at = $created_at->format('Y-m-d H:i:s');
     try {
         $pdo->beginTransaction();
-        $stmt = $pdo->prepare('INSERT INTO threads (title) VALUES (:title)');
+        $stmt = $pdo->prepare('INSERT INTO threads (title, last_updated_at) VALUES (:title, :created_at)');
+        $stmt->bindParam('created_at', $formatted_created_at);
         $stmt->bindParam('title', $title);
         $stmt->execute();
         $thread_id = $pdo->query('SELECT LAST_INSERT_ID()')->fetchColumn();
@@ -71,6 +72,10 @@ function make_new_post(PDO $pdo, int $thread_id, string $poster_nickname, DateTi
         $stmt->bindParam('content', $content);
         $stmt->execute();
         $post_id = $pdo->query('SELECT LAST_INSERT_ID()')->fetchColumn();
+        $stmt = $pdo->prepare('UPDATE threads SET last_updated_at = :created_at WHERE id = :thread_id');
+        $stmt->bindParam('thread_id', $thread_id, PDO::PARAM_INT);
+        $stmt->bindParam('created_at', $formatted_created_at);
+        $stmt->execute();
         $pdo->commit();
         return $post_id;
     } catch (Exception $e) {
