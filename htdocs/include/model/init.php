@@ -38,6 +38,7 @@ id INT AUTO_INCREMENT,
 thread_id INT,
 poster_nickname VARCHAR(:nickname_length),
 created_at DATETIME,
+is_hidden SMALLINT,
 content VARCHAR(:content_length),
 PRIMARY KEY (id),
 FOREIGN KEY (thread_id) REFERENCES threads(id)
@@ -54,8 +55,9 @@ FOREIGN KEY (thread_id) REFERENCES threads(id)
 
 function create_tables(PDO $pdo) : bool {
     $success = true;
-    $success = create_threads_table($pdo) && alter_threads_table($pdo) && $success;
+    $success = create_threads_table($pdo) && $success;
     $success = create_posts_table($pdo) && $success;
+    $success = $success && alter_threads_table($pdo);
     return $success;
 }
 

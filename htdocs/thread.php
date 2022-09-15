@@ -18,7 +18,7 @@ $pdo = get_db_connection();
 if ($pdo) {
     $posts = get_post_list($pdo, $current_thread_id);
     $thread_info = get_thread_info($pdo, $current_thread_id);
-    $is_error = is_null($posts) || is_null($thread_info);
+    $is_error = is_null($posts) || is_null($thread_info) || ($posts[0]['is_hidden'] === IS_HIDDEN_TRUE);
 }
 
 $pdo = null;
@@ -42,12 +42,13 @@ $pdo = null;
 		<?php
 		$count = 0;
 		foreach ($posts as $post):
-		++$count;?>
+		++$count;
+		if ($post['is_hidden'] === IS_HIDDEN_FALSE):?>
 		    <div id="post-<?=$count?>">
 			<div><?=$count?>. <?=htmlspecialchars(nickname($post['poster_nickname']))?> <?=$post['created_at']?></div>
 			<pre><?=htmlspecialchars($post['content'])?></pre>
 		    </div>
-		<?php endforeach; ?>
+		<?php endif; endforeach; ?>
 	    </div>
 	    <hr>
 	    <div>
