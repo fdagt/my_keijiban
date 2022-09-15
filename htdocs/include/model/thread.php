@@ -23,16 +23,18 @@ function get_thread_info(PDO $pdo, int $thread_id) : ?array {
     }
 }
 
-function make_new_thread(PDO $pdo, string $title, string $poster_nickname, string $content) : ?int {
+function make_new_thread(PDO $pdo, string $title, string $poster_nickname, DateTime $created_at, string $content) : ?int {
+    $formatted_created_at = $created_at->format('Y-m-d H:i:s');
     try {
         $pdo->beginTransaction();
         $stmt = $pdo->prepare('INSERT INTO threads (title) VALUES (:title)');
         $stmt->bindParam('title', $title);
         $stmt->execute();
         $thread_id = $pdo->query('SELECT LAST_INSERT_ID()')->fetchColumn();
-        $stmt = $pdo->prepare('INSERT INTO posts (thread_id, poster_nickname, content) VALUES (:thread_id, :poster_nickname, :content)');
+        $stmt = $pdo->prepare('INSERT INTO posts (thread_id, poster_nickname, created_at, content) VALUES (:thread_id, :poster_nickname, :created_at, :content)');
         $stmt->bindParam('thread_id', $thread_id, PDO::PARAM_INT);
         $stmt->bindParam('poster_nickname', $poster_nickname);
+        $stmt->bindParam('created_at', $formatted_created_at);
         $stmt->bindParam('content', $content);
         $stmt->execute();
         $pdo->commit();
@@ -58,12 +60,14 @@ function get_post_list(PDO $pdo, int $thread_id) : ?array {
     }
 }
 
-function make_new_post(PDO $pdo, int $thread_id, string $poster_nickname, string $content) : ?int {
+function make_new_post(PDO $pdo, int $thread_id, string $poster_nickname, DateTime $created_at, string $content) : ?int {
+    $formatted_created_at = $created_at->format('Y-m-d H:i:s');
     try {
         $pdo->beginTransaction();
-        $stmt = $pdo->prepare('INSERT INTO posts (thread_id, poster_nickname, content) VALUES (:thread_id, :poster_nickname, :content)');
+        $stmt = $pdo->prepare('INSERT INTO posts (thread_id, poster_nickname, created_at, content) VALUES (:thread_id, :poster_nickname, :created_at, :content)');
         $stmt->bindParam('thread_id', $thread_id, PDO::PARAM_INT);
         $stmt->bindParam('poster_nickname', $poster_nickname);
+        $stmt->bindParam('created_at', $formatted_created_at);
         $stmt->bindParam('content', $content);
         $stmt->execute();
         $post_id = $pdo->query('SELECT LAST_INSERT_ID()')->fetchColumn();

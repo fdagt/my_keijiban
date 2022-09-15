@@ -15,6 +15,8 @@ define('BBS_TITLE_LENGTH', 64);
 define('BBS_NICKNAME_LENGTH', 64);
 # 書き込み内容の最大長
 define('BBS_CONTENT_LENGTH', 1000);
+# タイムゾーン
+define('BBS_TIMEZONE', 'Asia/Tokyo');
 
 # Not configurable zone.
 # Do not edit.

@@ -42,7 +42,7 @@ $pdo = null;
 		foreach ($posts as $post):
 		++$count;?>
 		    <div id="post-<?=$count?>">
-			<div><?=$count?>. <?=htmlspecialchars($post['poster_nickname'])?></div>
+			<div><?=$count?>. <?=htmlspecialchars($post['poster_nickname'])?> <?=$post['created_at']?></div>
 			<pre><?=htmlspecialchars($post['content'])?></pre>
 		    </div>
 		<?php endforeach; ?>

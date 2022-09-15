@@ -25,6 +25,7 @@ function create_posts_table(PDO $pdo) : bool {
 id INT AUTO_INCREMENT,
 thread_id INT,
 poster_nickname VARCHAR(:nickname_length),
+created_at DATETIME,
 content VARCHAR(:content_length),
 PRIMARY KEY (id),
 FOREIGN KEY (thread_id) REFERENCES threads(id)
