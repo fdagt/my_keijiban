@@ -17,6 +17,8 @@ define('BBS_NICKNAME_LENGTH', 64);
 define('BBS_CONTENT_LENGTH', 1000);
 # タイムゾーン
 define('BBS_TIMEZONE', 'Asia/Tokyo');
+# デフォルトの投稿者名
+define('BBS_DEFAULT_NICKNAME', '名無しさん');
 
 # Not configurable zone.
 # Do not edit.

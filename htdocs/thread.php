@@ -2,6 +2,7 @@
 require_once __DIR__.'/include/model/const.php';
 require_once __DIR__.'/include/model/db.php';
 require_once __DIR__.'/include/model/thread.php';
+require_once __DIR__.'/include/model/util.php';
 
 $posts = null;
 $thread_info = null;
@@ -42,7 +43,7 @@ $pdo = null;
 		foreach ($posts as $post):
 		++$count;?>
 		    <div id="post-<?=$count?>">
-			<div><?=$count?>. <?=htmlspecialchars($post['poster_nickname'])?> <?=$post['created_at']?></div>
+			<div><?=$count?>. <?=htmlspecialchars(nickname($post['poster_nickname']))?> <?=$post['created_at']?></div>
 			<pre><?=htmlspecialchars($post['content'])?></pre>
 		    </div>
 		<?php endforeach; ?>
