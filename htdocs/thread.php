@@ -54,12 +54,14 @@ $pdo = null;
 		    <div>
 			<label for="poster_nickname">名前</label>
 			<br>
-			<input type="text" id="poster_nickname" name="poster_nickname">
+			<input type="text" id="poster_nickname" name="poster_nickname"
+			       maxlength="<?=BBS_NICKNAME_LENGTH?>">
 		    </div>
 		    <div>
 			<label for="content">書き込み内容</label>
 			<br>
-			<textarea id="content" name="content"></textarea>
+			<textarea id="content" name="content"
+				  required maxlength="<?=BBS_CONTENT_LENGTH?>"></textarea>
 		    </div>
 		    <div>
 			<input type="submit" name="submit" value="送信">
