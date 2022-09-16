@@ -14,7 +14,7 @@ $current_thread_id = null;
 	<?php include __DIR__.'/include/status.php'; ?>
 	<div>
 	    <h2>新しいスレッド</h2>
-	    <form method="post" action="/f/new-thread.php" onsubmit="register_nickname(&quot;poster_nickname&quot;); return true;">
+	    <form method="post" action="/new-thread-action.php" onsubmit="register_nickname(&quot;poster_nickname&quot;); return true;">
 		<div>
 		    <label for="title">タイトル</label>
 		    <br>

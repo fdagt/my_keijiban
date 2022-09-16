@@ -51,7 +51,7 @@ $pdo = null;
 	    <hr>
 	    <div>
 		<h2>書き込む</h2>
-		<form method="post" action="/f/new-post.php" onsubmit="register_nickname(&quot;poster_nickname&quot;); return true;">
+		<form method="post" action="/new-post-action.php" onsubmit="register_nickname(&quot;poster_nickname&quot;); return true;">
 		    <input type="hidden" name="thread_id" value="<?=$current_thread_id?>">
 		    <div>
 			<label for="poster_nickname">名前</label>
