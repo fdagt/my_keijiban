@@ -35,6 +35,7 @@ if ($pdo) {
 				 'thread_id' => $thread['id'],
 				 'poster_nickname' => $thread['poster_nickname'],
 				 'created_at' => $thread['created_at'],
+				 'public_id' => $thread['public_id'],
 				 'is_hidden' => $thread['is_hidden'],
 				 'content' => $thread['content']];
 			include __DIR__.'/include/post.php'; ?>

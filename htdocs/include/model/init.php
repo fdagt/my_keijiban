@@ -38,6 +38,7 @@ id INT AUTO_INCREMENT,
 thread_id INT,
 poster_nickname VARCHAR(:nickname_length),
 created_at DATETIME,
+public_id VARCHAR(:id_length),
 is_hidden SMALLINT,
 content VARCHAR(:content_length),
 PRIMARY KEY (id),
@@ -45,7 +46,25 @@ FOREIGN KEY (thread_id) REFERENCES threads(id)
 )');
         $stmt->bindValue('nickname_length', BBS_NICKNAME_BYTE_LENGTH, PDO::PARAM_INT);
         $stmt->bindValue('content_length', BBS_CONTENT_BYTE_LENGTH, PDO::PARAM_INT);
+        $stmt->bindValue('id_length', BBS_ID_LENGTH, PDO::PARAM_INT);
         $stmt->execute();
+        return true;
+    } catch (Exception $e) {
+        error_log($e->getMessage());
+        return false;
+    }
+}
+
+function create_salt_table(PDO $pdo) : bool {
+    try {
+        $stmt = $pdo->prepare('CREATE TABLE IF NOT EXISTS salt (
+updated_at DATE,
+value VARBINARY(:salt_length)
+)');
+        $stmt->bindValue('salt_length', BBS_SALT_LENGTH, PDO::PARAM_INT);
+        $stmt->execute();
+        if ($pdo->query('SELECT COUNT(*) FROM salt')->fetchColumn() === 0)
+            $pdo->query('INSERT INTO salt (updated_at, value) VALUES (\'2020-01-01\', \'0\')');
         return true;
     } catch (Exception $e) {
         error_log($e->getMessage());
@@ -58,6 +77,7 @@ function create_tables(PDO $pdo) : bool {
     $success = create_threads_table($pdo) && $success;
     $success = create_posts_table($pdo) && $success;
     $success = $success && alter_threads_table($pdo);
+    $success = create_salt_table($pdo) && $success;
     return $success;
 }
 

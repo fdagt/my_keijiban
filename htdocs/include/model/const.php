@@ -19,12 +19,15 @@ define('BBS_CONTENT_LENGTH', 1000);
 define('BBS_TIMEZONE', 'Asia/Tokyo');
 # デフォルトの投稿者名
 define('BBS_DEFAULT_NICKNAME', '名無しさん');
+# IDの長さ(0~20)
+define('BBS_ID_LENGTH', 12);
 
 # Not configurable zone.
 # Do not edit.
 define('BBS_TITLE_BYTE_LENGTH', 4 * BBS_TITLE_LENGTH);
 define('BBS_NICKNAME_BYTE_LENGTH', 4 * BBS_NICKNAME_LENGTH);
 define('BBS_CONTENT_BYTE_LENGTH', 4 * BBS_CONTENT_LENGTH);
+define('BBS_SALT_LENGTH', 30);
 
 define('STATUS_CODE_NEW_THREAD_SUCCESS', 0x10);
 define('STATUS_CODE_NEW_THREAD_FAIL', 0x11);

@@ -15,6 +15,6 @@ $content = $_POST['content'];
 
 $pdo = get_db_connection();
 
-$post_id = make_new_post($pdo, $thread_id, $poster_nickname, new DateTime('now', new DateTimeZone(BBS_TIMEZONE)), $content);
+$post_id = make_new_post($pdo, $thread_id, $poster_nickname, new DateTime('now', new DateTimeZone(BBS_TIMEZONE)), $_SERVER['REMOTE_ADDR'], $content);
 
 header('Location: /thread.php?id='.$thread_id.'&s='.(is_null($post_id) ? STATUS_CODE_NEW_POST_FAIL : STATUS_CODE_NEW_POST_SUCCESS));

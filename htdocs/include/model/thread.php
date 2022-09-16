@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__.'/const.php';
+require_once __DIR__.'/id.php';
 
 function get_thread_list(PDO $pdo) : ?array {
     try {
@@ -14,7 +15,7 @@ function get_thread_list(PDO $pdo) : ?array {
 
 function get_thread_and_first_post_list(PDO $pdo) : ?array {
     try {
-        $stmt = $pdo->query('SELECT threads.id AS id, title, last_updated_at, first_post_id, poster_nickname, created_at, is_hidden, content FROM threads INNER JOIN posts ON threads.first_post_id = posts.id ORDER BY last_updated_at DESC');
+        $stmt = $pdo->query('SELECT threads.id AS id, title, last_updated_at, first_post_id, poster_nickname, created_at, public_id, is_hidden, content FROM threads INNER JOIN posts ON threads.first_post_id = posts.id ORDER BY last_updated_at DESC');
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     } catch (Exception $e) {
         error_log($e->getMessage());
@@ -35,7 +36,10 @@ function get_thread_info(PDO $pdo, int $thread_id) : ?array {
     }
 }
 
-function make_new_thread(PDO $pdo, string $title, string $poster_nickname, DateTime $created_at, string $content) : ?int {
+function make_new_thread(PDO $pdo, string $title, string $poster_nickname, DateTime $created_at, string $ip_address, string $content) : ?int {
+    $public_id = get_id($pdo, $created_at, $ip_address);
+    if (is_null($public_id))
+        return null;
     $formatted_created_at = $created_at->format('Y-m-d H:i:s');
     try {
         $pdo->beginTransaction();
@@ -44,10 +48,11 @@ function make_new_thread(PDO $pdo, string $title, string $poster_nickname, DateT
         $stmt->bindParam('title', $title);
         $stmt->execute();
         $thread_id = $pdo->query('SELECT LAST_INSERT_ID()')->fetchColumn();
-        $stmt = $pdo->prepare('INSERT INTO posts (thread_id, poster_nickname, created_at, is_hidden, content) VALUES (:thread_id, :poster_nickname, :created_at, :is_hidden, :content)');
+        $stmt = $pdo->prepare('INSERT INTO posts (thread_id, poster_nickname, created_at, public_id, is_hidden, content) VALUES (:thread_id, :poster_nickname, :created_at, :public_id, :is_hidden, :content)');
         $stmt->bindParam('thread_id', $thread_id, PDO::PARAM_INT);
         $stmt->bindParam('poster_nickname', $poster_nickname);
         $stmt->bindParam('created_at', $formatted_created_at);
+        $stmt->bindParam('public_id', $public_id);
         $stmt->bindValue('is_hidden', IS_HIDDEN_FALSE);
         $stmt->bindParam('content', $content);
         $stmt->execute();
@@ -79,14 +84,18 @@ function get_post_list(PDO $pdo, int $thread_id) : ?array {
     }
 }
 
-function make_new_post(PDO $pdo, int $thread_id, string $poster_nickname, DateTime $created_at, string $content) : ?int {
+function make_new_post(PDO $pdo, int $thread_id, string $poster_nickname, DateTime $created_at, string $ip_address, string $content) : ?int {
+    $public_id = get_id($pdo, $created_at, $ip_address);
+    if (is_null($public_id))
+        return null;
     $formatted_created_at = $created_at->format('Y-m-d H:i:s');
     try {
         $pdo->beginTransaction();
-        $stmt = $pdo->prepare('INSERT INTO posts (thread_id, poster_nickname, created_at, is_hidden, content) VALUES (:thread_id, :poster_nickname, :created_at, :is_hidden, :content)');
+        $stmt = $pdo->prepare('INSERT INTO posts (thread_id, poster_nickname, created_at, public_id, is_hidden, content) VALUES (:thread_id, :poster_nickname, :created_at, :public_id, :is_hidden, :content)');
         $stmt->bindParam('thread_id', $thread_id, PDO::PARAM_INT);
         $stmt->bindParam('poster_nickname', $poster_nickname);
         $stmt->bindParam('created_at', $formatted_created_at);
+        $stmt->bindParam('public_id', $public_id);
         $stmt->bindValue('is_hidden', IS_HIDDEN_FALSE);
         $stmt->bindParam('content', $content);
         $stmt->execute();
