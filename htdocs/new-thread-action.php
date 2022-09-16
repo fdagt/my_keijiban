@@ -12,10 +12,11 @@ if (!isset($_POST['submit'])) {
 $title = $_POST['title'];
 $poster_nickname = $_POST['poster_nickname'];
 $content = $_POST['content'];
+$thread_id = null;
 
 $pdo = get_db_connection();
-
-$thread_id = make_new_thread($pdo, $title, $poster_nickname, new DateTime('now', new DateTimeZone(BBS_TIMEZONE)), $_SERVER['REMOTE_ADDR'], $content);
+if ($pdo)
+    $thread_id = make_new_thread($pdo, $title, $poster_nickname, new DateTime('now', new DateTimeZone(BBS_TIMEZONE)), $_SERVER['REMOTE_ADDR'], $content);
 
 if (is_null($thread_id))
     header('Location: /new-thread.php?s='.STATUS_CODE_NEW_THREAD_FAIL);

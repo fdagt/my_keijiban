@@ -12,9 +12,10 @@ if (!isset($_POST['submit'])) {
 $thread_id = filter_var($_POST['thread_id'], FILTER_VALIDATE_INT);
 $poster_nickname = $_POST['poster_nickname'];
 $content = $_POST['content'];
+$post_id = null;
 
 $pdo = get_db_connection();
-
-$post_id = make_new_post($pdo, $thread_id, $poster_nickname, new DateTime('now', new DateTimeZone(BBS_TIMEZONE)), $_SERVER['REMOTE_ADDR'], $content);
+if ($pdo && ($thread_id !== false))
+    $post_id = make_new_post($pdo, $thread_id, $poster_nickname, new DateTime('now', new DateTimeZone(BBS_TIMEZONE)), $_SERVER['REMOTE_ADDR'], $content);
 
 header('Location: /thread.php?id='.$thread_id.'&s='.(is_null($post_id) ? STATUS_CODE_NEW_POST_FAIL : STATUS_CODE_NEW_POST_SUCCESS));
