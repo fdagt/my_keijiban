@@ -1,7 +1,7 @@
 <div id="post-<?=$post['id']?>">
     <div>
 	<?php if ($post['is_hidden']) echo '<del>'; ?>
-	<?=$count?>. <?=htmlspecialchars($post['poster_nickname'])?> <?=htmlspecialchars($post['created_at'])?> ID:<?=htmlspecialchars($post['public_id'])?>
+	<?=$count?>. <?=htmlspecialchars($post['poster_nickname'])?> <?=htmlspecialchars($post['created_at'])?> IP:<?=htmlspecialchars($post['ip_address'])?>
 	<?php if ($post['is_hidden']) echo '</del>'; ?>
     </div>
     <form method="post" action="/admin/set-is-hidden-action.php">

@@ -59,11 +59,12 @@ function make_new_thread(PDO $pdo, string $title, string $poster_nickname, DateT
         $stmt->bindParam('title', $title);
         $stmt->execute();
         $thread_id = $pdo->query('SELECT LAST_INSERT_ID()')->fetchColumn();
-        $stmt = $pdo->prepare('INSERT INTO posts (thread_id, poster_nickname, created_at, public_id, is_hidden, content) VALUES (:thread_id, :poster_nickname, :created_at, :public_id, :is_hidden, :content)');
+        $stmt = $pdo->prepare('INSERT INTO posts (thread_id, poster_nickname, created_at, public_id, ip_address, is_hidden, content) VALUES (:thread_id, :poster_nickname, :created_at, :public_id, :ip_address, :is_hidden, :content)');
         $stmt->bindParam('thread_id', $thread_id, PDO::PARAM_INT);
         $stmt->bindParam('poster_nickname', $poster_nickname);
         $stmt->bindParam('created_at', $formatted_created_at);
         $stmt->bindParam('public_id', $public_id);
+        $stmt->bindParam('ip_address', $ip_address);
         $stmt->bindValue('is_hidden', IS_HIDDEN_FALSE);
         $stmt->bindParam('content', $content);
         $stmt->execute();
@@ -111,11 +112,12 @@ function make_new_post(PDO $pdo, int $thread_id, string $poster_nickname, DateTi
     $formatted_created_at = $created_at->format('Y-m-d H:i:s');
     try {
         $pdo->beginTransaction();
-        $stmt = $pdo->prepare('INSERT INTO posts (thread_id, poster_nickname, created_at, public_id, is_hidden, content) VALUES (:thread_id, :poster_nickname, :created_at, :public_id, :is_hidden, :content)');
+        $stmt = $pdo->prepare('INSERT INTO posts (thread_id, poster_nickname, created_at, public_id, ip_address, is_hidden, content) VALUES (:thread_id, :poster_nickname, :created_at, :public_id, :ip_address, :is_hidden, :content)');
         $stmt->bindParam('thread_id', $thread_id, PDO::PARAM_INT);
         $stmt->bindParam('poster_nickname', $poster_nickname);
         $stmt->bindParam('created_at', $formatted_created_at);
         $stmt->bindParam('public_id', $public_id);
+        $stmt->bindParam('ip_address', $ip_address);
         $stmt->bindValue('is_hidden', IS_HIDDEN_FALSE);
         $stmt->bindParam('content', $content);
         $stmt->execute();
