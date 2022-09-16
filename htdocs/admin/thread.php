@@ -19,7 +19,7 @@ $pdo = get_db_connection();
 if ($pdo) {
     $posts = get_post_list($pdo, $thread_id);
     $thread_info = get_thread_info($pdo, $thread_id);
-    $is_error = is_null($posts) || is_null($is_error);
+    $is_error = is_null($posts) || is_null($thread_info);
 }
 ?><!DOCTYPE html>
 <html>
