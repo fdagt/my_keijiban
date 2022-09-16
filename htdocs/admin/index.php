@@ -28,7 +28,7 @@ $pdo = null;
 			<li>
 			    <?php if ($thread['is_hidden']) echo '<del>'; ?>
 			    <a href="/admin/thread.php?id=<?=$thread['id']?>">
-				<?=htmlspecialchars($thread['title'])?>
+				<?=htmlspecialchars($thread['title'])?> (<?=$thread['post_count']?>)
 			    </a>
 			    <?php if ($thread['is_hidden']) echo '</del>'; ?>
 			</li>

@@ -29,6 +29,9 @@ if ($pdo) {
 		if ($thread['is_hidden'] === IS_HIDDEN_FALSE): ?>
 		    <div>
 			<h2><a href="/thread.php?id=<?=$thread['id']?>"><?=htmlspecialchars($thread['title'])?></a></h2>
+			<div>
+			    書き込み数: <?=$thread['post_count']?>
+			</div>
 			<?php 
 			$count = 1;
 			$post = ['id' => $thread['first_post_id'],

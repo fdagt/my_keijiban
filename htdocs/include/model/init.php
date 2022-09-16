@@ -10,6 +10,7 @@ id INT AUTO_INCREMENT,
 title VARCHAR(:title_length),
 last_updated_at DATETIME,
 first_post_id INT,
+post_count INT,
 PRIMARY KEY (id)
 )');
         $stmt->bindValue('title_length', BBS_TITLE_BYTE_LENGTH, PDO::PARAM_INT);

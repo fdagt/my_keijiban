@@ -16,7 +16,7 @@ function get_thread_list(PDO $pdo) : ?array {
 
 function get_thread_and_first_post_list(PDO $pdo) : ?array {
     try {
-        $stmt = $pdo->query('SELECT threads.id AS id, title, last_updated_at, first_post_id, poster_nickname, created_at, public_id, is_hidden, content FROM threads INNER JOIN posts ON threads.first_post_id = posts.id ORDER BY last_updated_at DESC');
+        $stmt = $pdo->query('SELECT threads.id AS id, title, last_updated_at, first_post_id, post_count, poster_nickname, created_at, public_id, is_hidden, content FROM threads INNER JOIN posts ON threads.first_post_id = posts.id ORDER BY last_updated_at DESC');
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     } catch (Exception $e) {
         error_log($e->getMessage());
@@ -54,7 +54,7 @@ function make_new_thread(PDO $pdo, string $title, string $poster_nickname, DateT
     $formatted_created_at = $created_at->format('Y-m-d H:i:s');
     try {
         $pdo->beginTransaction();
-        $stmt = $pdo->prepare('INSERT INTO threads (title, last_updated_at) VALUES (:title, :created_at)');
+        $stmt = $pdo->prepare('INSERT INTO threads (title, last_updated_at, post_count) VALUES (:title, :created_at, 1)');
         $stmt->bindParam('created_at', $formatted_created_at);
         $stmt->bindParam('title', $title);
         $stmt->execute();
@@ -122,7 +122,7 @@ function make_new_post(PDO $pdo, int $thread_id, string $poster_nickname, DateTi
         $stmt->bindParam('content', $content);
         $stmt->execute();
         $post_id = $pdo->query('SELECT LAST_INSERT_ID()')->fetchColumn();
-        $stmt = $pdo->prepare('UPDATE threads SET last_updated_at = :created_at WHERE id = :thread_id');
+        $stmt = $pdo->prepare('UPDATE threads SET last_updated_at = :created_at, post_count = post_count + 1 WHERE id = :thread_id');
         $stmt->bindParam('thread_id', $thread_id, PDO::PARAM_INT);
         $stmt->bindParam('created_at', $formatted_created_at);
         $stmt->execute();
