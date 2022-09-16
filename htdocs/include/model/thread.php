@@ -2,6 +2,7 @@
 
 require_once __DIR__.'/const.php';
 require_once __DIR__.'/id.php';
+require_once __DIR__.'/util.php';
 
 function get_thread_list(PDO $pdo) : ?array {
     try {
@@ -36,7 +37,17 @@ function get_thread_info(PDO $pdo, int $thread_id) : ?array {
     }
 }
 
+function is_valid_new_thread_parameter(string $title, string $poster_nickname, string $content) : bool {
+    $valid = true;
+    $valid = $valid && is_strlen_in_range($title, 1, BBS_TITLE_LENGTH);
+    $valid = $valid && is_strlen_in_range($poster_nickname, 0, BBS_NICKNAME_LENGTH);
+    $valid = $valid && is_strlen_in_range($content, 1, BBS_CONTENT_LENGTH);
+    return $valid;
+}
+
 function make_new_thread(PDO $pdo, string $title, string $poster_nickname, DateTime $created_at, string $ip_address, string $content) : ?int {
+    if (!is_valid_new_thread_parameter($title, $poster_nickname, $content))
+        return null;
     $public_id = get_id($pdo, $created_at, $ip_address);
     if (is_null($public_id))
         return null;
@@ -84,7 +95,16 @@ function get_post_list(PDO $pdo, int $thread_id) : ?array {
     }
 }
 
+function is_valid_new_post_parameter(string $poster_nickname, string $content) : bool {
+    $valid = true;
+    $valid = $valid && is_strlen_in_range($poster_nickname, 0, BBS_NICKNAME_LENGTH);
+    $valid = $valid && is_strlen_in_range($content, 1, BBS_CONTENT_LENGTH);
+    return $valid;
+}
+
 function make_new_post(PDO $pdo, int $thread_id, string $poster_nickname, DateTime $created_at, string $ip_address, string $content) : ?int {
+    if (!is_valid_new_post_parameter($poster_nickname, $content))
+        return null;
     $public_id = get_id($pdo, $created_at, $ip_address);
     if (is_null($public_id))
         return null;
