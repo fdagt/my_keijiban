@@ -30,6 +30,8 @@ $pdo = null;
 	<?php else: ?>
 	    <title><?=htmlspecialchars($thread_info['title'])?> | <?=htmlspecialchars(BBS_NAME)?></title>
 	<?php endif; ?>
+	<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+	<script src="/script.js"></script>
     </head>
     <body>
 	<?php include __DIR__.'/include/header.php'; ?>
@@ -49,13 +51,14 @@ $pdo = null;
 	    <hr>
 	    <div>
 		<h2>書き込む</h2>
-		<form method="post" action="/f/new-post.php">
+		<form method="post" action="/f/new-post.php" onsubmit="register_nickname(&quot;poster_nickname&quot;); return true;">
 		    <input type="hidden" name="thread_id" value="<?=$current_thread_id?>">
 		    <div>
 			<label for="poster_nickname">名前</label>
 			<br>
 			<input type="text" id="poster_nickname" name="poster_nickname"
 			       maxlength="<?=BBS_NICKNAME_LENGTH?>">
+			<script>fill_nickname_from_cookie("poster_nickname");</script>
 		    </div>
 		    <div>
 			<label for="content">書き込み内容</label>

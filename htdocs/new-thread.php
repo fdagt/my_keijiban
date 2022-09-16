@@ -6,13 +6,15 @@ $current_thread_id = null;
 <html>
     <head>
 	<title>新しいスレッド | <?=htmlspecialchars(BBS_NAME)?></title>
+	<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+	<script src="/script.js"></script>
     </head>
     <body>
 	<?php include __DIR__.'/include/header.php'; ?>
 	<?php include __DIR__.'/include/status.php'; ?>
 	<div>
 	    <h2>新しいスレッド</h2>
-	    <form method="post" action="/f/new-thread.php">
+	    <form method="post" action="/f/new-thread.php" onsubmit="register_nickname(&quot;poster_nickname&quot;); return true;">
 		<div>
 		    <label for="title">タイトル</label>
 		    <br>
@@ -24,6 +26,7 @@ $current_thread_id = null;
 		    <br>
 		    <input type="text" id="poster_nickname" name="poster_nickname"
 			   maxlength="<?=BBS_NICKNAME_LENGTH?>">
+		    <script>fill_nickname_from_cookie("poster_nickname");</script>
 		</div>
 		<div>
 		    <label for="content">書き込み内容</label>
